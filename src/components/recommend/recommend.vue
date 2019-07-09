@@ -2,7 +2,8 @@
   <div class="recommend"
        ref="recommend">
     <scroll ref="scroll"
-            class="recommend-content">
+            class="recommend-content"
+            :data="discList">
       <div>
         <div v-if="recommends.length"
              class="slider-wrapper">
@@ -11,12 +12,39 @@
               <div v-for="(item, index) in recommends"
                    :key="index">
                 <a :href="item.linkUrl">
-                  <img :src="item.picUrl" />
+                  <img @load="loadImage"
+                       :src="item.picUrl" />
                 </a>
               </div>
             </slider>
           </div>
         </div>
+        <div class="recommend-list">
+          <h1 class="list-title">热门歌单推荐</h1>
+          <ul>
+            <li v-for="(item,index) in discList"
+                :key="index"
+                class="item">
+              <div class="icon">
+                <img v-lazy="item.imgurl"
+                     width="60"
+                     height="60">
+              </div>
+              <div class="text">
+                <h2 class="name"
+                    v-html="item.creator.name"></h2>
+                <p class="desc"
+                   v-html="item.dissname"></p>
+              </div>
+            </li>
+
+          </ul>
+        </div>
+
+      </div>
+      <div class="loading-container"
+           v-show="!discList.length">
+        <loading></loading>
       </div>
     </scroll>
   </div>
@@ -25,17 +53,19 @@
 <script>
 import Slider from 'base/slider/slider'
 import Scroll from 'base/scroll/scroll'
-
+import Loading from 'base/loading/loading'
 import { ERR_OK } from 'api/config'
-import { getRecommend } from 'api/recommend'
+import { getRecommend, getDiscList } from 'api/recommend'
 export default {
   data() {
     return {
-      recommends: []
+      recommends: [],
+      discList: []
     }
   },
   created() {
     this._getRecommend()
+    this._getDiscList()
   },
   methods: {
     // 获取轮播图数据
@@ -46,11 +76,31 @@ export default {
           this.recommends = res.data.slider
         }
       })
+    },
+    // 获取列表数据
+    _getDiscList() {
+      getDiscList().then((res) => {
+        console.log(res.data.list)
+        if (res.code === ERR_OK) {
+          this.discList = res.data.list
+        }
+      })
+    },
+    // 轮播图图片加载好了调一下scroll 的refresh
+    loadImage() {
+      if (!this.checkloaded) {
+        this.checkloaded = true
+        setTimeout(() => {
+          this.$refs.scroll.refresh()
+        }, 20)
+      }
     }
   },
+
   components: {
     Slider,
-    Scroll
+    Scroll,
+    Loading
   }
 }
 
@@ -126,11 +176,10 @@ export default {
         }
       }
     }
-
     .loading-container {
       position: absolute;
       width: 100%;
-      top: 50%;
+      top: 60%;
       transform: translateY(-50%);
     }
   }
