@@ -91,6 +91,7 @@ export default {
     refresh() {
       this.scroll && this.scroll.refresh()
     },
+    // 滚动到相应位置
     scrollTo() {
       this.scroll && this.scroll.scrollTo.apply(this.scroll, arguments)
     },
