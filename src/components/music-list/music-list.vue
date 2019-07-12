@@ -48,9 +48,14 @@ import Scroll from 'base/scroll/scroll'
 import Loading from 'base/loading/loading'
 import SongList from 'base/song-list/song-list'
 import { prefixStyle } from 'common/js/dom'
+import { mapActions } from 'vuex'
+
 const RESERVED_HEIGHT = 40
+
 const transform = prefixStyle('transform')
+
 const backdrop = prefixStyle('backdrop-filter')// 高斯模糊的方法
+
 export default {
   props: {
     title: {
@@ -97,12 +102,21 @@ export default {
     back() {
       this.$router.back()
     },
+    // 点击每一首歌曲
     selectItem(item, index) {
+      this.selectPlay({ // 将播放列表数据存到状态管理里
+        list: this.songs,
+        index
+      })
     },
     scroll(pos) {
       this.scrollY = pos.y
     },
-    random() { }
+    random() { },
+    ...mapActions([
+      'selectPlay',
+      'randomPlay'
+    ])
   },
   components: {
     Scroll,
