@@ -1,149 +1,35 @@
 <template>
   <div class="player"
-       v-show="playlist">
-    <!--  全屏的播放器 -->
+       v-show="playlist.length>0">
+       <!-- 全屏播放器 -->
     <div class="normal-player"
-         v-show="fullScreen">
-      <div class="background">
-        <img :src="currentSong.image"
-             height="100%"
-             width="100%">
-      </div>
-      <div class="top">
-        <div class="back"
-             @click="back">
-          <i class="icon-back"></i>
-        </div>
-        <h1 class="title"
-            v-html="currentSong.name"></h1>
-        <h2 class="subtitle"
-            v-html="currentSong.singer"></h2>
-      </div>
-      <div class="middle">
-        <div class="middle-l">
-          <div class="cd-wrapper">
-            <div class="cd">
-              <img :src="currentSong.image"
-                   class="image">
-            </div>
-          </div>
-          <div class="playing-lyric-wrapper">
-            <div class="playing-lyric"></div>
-          </div>
-        </div>
-        <scroll class="middle-r">
-          <div class="lyric-wrapper">
-            <div>
-              <p class="text"></p>
-            </div>
-            <div class="pure-music">
-              <p></p>
-            </div>
-          </div>
-        </scroll>
-      </div>
-    </div>
-    <div class="bottom">
-      <div class="dot-wrapper">
-        <span class="dot"></span>
-        <span class="dot"></span>
-      </div>
-      <div class="progress-wrapper">
-        <span class="time time-l"></span>
-        <div class="progress-bar-wrapper"></div>
-        <span class="time time-r"></span>
-      </div>
-      <div class="operators">
-        <div class="icon i-left">
-          <i></i>
-        </div>
-        <div class="icon i-left">
-          <i class="icon-prev"></i>
-        </div>
-        <div class="icon i-center">
-          <i class="needsclick"></i>
-        </div>
-        <div class="icon i-right">
-          <i class="icon-next"></i>
-        </div>
-        <div class="icon i-right">
-          <i class="icon"></i>
-        </div>
-      </div>
-    </div>
+         v-show="fullScreen"></div>
     <!-- 小的播放器 -->
     <div class="mini-player"
-         v-show="!fullScreen">
-      <div class="icon">
-        <div class="imgWrapper"
-             ref="miniWrapper">
-          <img ref="miniImage"
-               width="40"
-               height="40"
-               :src="currentSong.image">
-        </div>
-      </div>
-      <div class="text">
-        <h2 class="name"
-            v-html="currentSong.name"></h2>
-        <p class="desc"
-           v-html="currentSong.singer"></p>
-      </div>
-      <div class="control">
-        <!-- <progress-circle :radius="radius"
-                         :percent="percent">
-          <i @click.stop="togglePlaying"
-             class="icon-mini"
-             :class="miniIcon"></i>
-        </progress-circle> -->
-      </div>
-      <div class="control">
-        <i class="icon-playlist"></i>
-      </div>
-
-    </div>
+         v-show="!fullScreen"
+         @click="open"></div>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapMutations, mapActions } from 'vuex'
-import Scroll from 'base/scroll/scroll'
+import { mapGetters, mapMutations } from 'vuex'
 export default {
-  props: {
-    playlist: {
-      type: Array,
-      defalut: []
-    }
-  },
-  data() {
-    return {
-    }
-  },
-  components: {
-    Scroll
+  methods: {
+    open() {
+      this.setFullScreen(true)
+    },
+    ...mapMutations({ setFullScreen: 'SET_FULL_SCREEN' })
   },
   computed: {
     ...mapGetters([
-      'currentIndex',
-      'fullScreen',
-      'playing'
-    ])
-  },
-  methods: {
-    back() {
-      this.setFullScreen(false)
-    },
-    ...mapMutations({
-      setFullScreen: 'SET_FULL_SCREEN' // 设置不是全屏
-    }),
-    ...mapActions([
-      'savePlayHistory'
+      'currentSong',
+      'playlist',
+      'fullScreen'
     ])
   }
 }
 </script>
-
-<style lang="stylus" scoped>
+<style scoped lang="stylus" rel="stylesheet/stylus">
 @import '~common/stylus/variable';
 @import '~common/stylus/mixin';
 
