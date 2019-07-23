@@ -74,7 +74,7 @@
             <div class="progress-bar-wrapper">
               <progress-bar ref="progressBar"
                             :percent="percent"
-                            @percnetChange="onProgressBarChange"
+                            @percentChange="onProgressBarChange"
                             @percentChanging="onProgressBarChanging"></progress-bar>
             </div>
             <span class="time time-r">{{format(currentSong.duration)}}</span>
@@ -534,7 +534,7 @@ export default {
       clearTimeout(this.timer)
       this.timer = setTimeout(() => {
         this.songReady = true
-      }, 5000)
+      }, 1000)
 
       this.getLyric() // 获取歌词
     },
@@ -547,7 +547,7 @@ export default {
         newPlaying ? audio.play() : audio.pause()
       })
       if (!newPlaying) {
-        if (!this.fullScreen) {
+        if (this.fullScreen) {
           this.syncWrapperTransform('imageWrapper', 'image')
         } else {
           this.syncWrapperTransform('miniWrapper', 'miniImage')

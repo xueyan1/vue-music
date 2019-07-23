@@ -127,7 +127,6 @@ export default {
     },
     _genResult(data) {
       let ret = []
-      debugger
       if (data.zhida && data.zhida.singerid && this.page === 1) {
         ret.push(
           { ...data.zhida,

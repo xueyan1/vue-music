@@ -112,7 +112,11 @@ export default {
     scroll(pos) {
       this.scrollY = pos.y
     },
-    random() { },
+    random() {
+      this.randomPlay({
+        list: this.songs
+      })
+    },
     ...mapActions([
       'selectPlay',
       'randomPlay'

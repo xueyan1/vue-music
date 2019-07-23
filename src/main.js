@@ -7,6 +7,9 @@ import fastclick from 'fastclick'
 import VuelazyLoad from 'vue-lazyload'
 import 'common/stylus/index.styl'
 
+// eslint-disable-next-line no-unused-vars
+import vConsole from 'vconsole'
+
 Vue.config.productionTip = false
 // 使用懒加载
 Vue.use(VuelazyLoad, {
